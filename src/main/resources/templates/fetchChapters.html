@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<h2>Fetch Chapters</h2>
+
+<form action="/fetchChapters" method="get" th:object="${chapterRange}">
+    From: <input type="number" th:field="*{from}"><br>
+    To: <input type="number" th:field="*{to}"><br>
+    <input type="submit" value="Submit">
+</form>
+
+<div th:if="${param.successMessage}" class="success-message">
+    <p th:text="${param.successMessage}"></p>
+</div>
+</body>
+</html>
