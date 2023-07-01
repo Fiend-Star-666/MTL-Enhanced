@@ -17,6 +17,7 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.Date;
 import java.util.Properties;
 
 @Service
@@ -115,7 +116,7 @@ public class ChapterFetcher {
                 Document document = Jsoup.parse(response.toString());
 
                 // Find the desired <div> element
-                Element divElement = document.selectFirst("div.chapter-body.hyphenate[v-pre]");
+                Element divElement = document.selectFirst("div.chapter-body[v-pre]");
 
                 // Extract the content of the <div> element
                 assert divElement != null;
@@ -126,8 +127,8 @@ public class ChapterFetcher {
 
                 File directory = new File(directoryPath);
                 directory.mkdirs();
-
-                String fileName = directoryPath + "chapter_" + chapterNumber + ".txt";
+                Date date = new Date();
+                String fileName = directoryPath + "chapter_" + date.getTime()+"number_" + chapterNumber + ".txt";
 
                 FileWriter fileWriter = new FileWriter(fileName);
                 fileWriter.write(divContent);
