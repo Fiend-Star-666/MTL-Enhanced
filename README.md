@@ -12,7 +12,11 @@ This project is a Java application that fetches and saves individual chapters of
 - Uses Jsoup for HTML parsing.
 - Supports HTTPS connections with custom trust stores.
 
+## To Be Implemented 
 
+- Linking ChatGpt apis or using LLMs so that it can translate the Novels or long texts of different languages into something coherent while keeping the context sane.
+- Add swappable or auto fetch for the website structure.
+  
 Known Issues
 The application assumes a specific website structure and may not work with different websites or novel sources.
 Error handling and logging can be improved for better troubleshooting and debugging.
