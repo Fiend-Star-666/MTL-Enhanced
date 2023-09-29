@@ -1,99 +1,44 @@
 package com.astoria.mtldataconvert.services;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 @Service
+@Getter
+@Setter
 public class ChapterFetcher {
-    private final String urlBase;
-    private final String urlNovel;
-    private final String trustStorePath;
-    private final String trustStorePassword;
-    private final String certificateAlias;
 
-    public ChapterFetcher(@Value("${URL_BASE}") String urlBase,
-                          @Value("${URL_NOVEL}") String urlNovel,
-                          @Value("${TRUST_STORE_PATH}") String trustStorePath,
-                          @Value("${TRUST_STORE_PASSWORD}") String trustStorePassword,
-                          @Value("${CERTIFICATE_ALIAS}") String certificateAlias) {
-        this.urlBase = urlBase;
-        this.urlNovel = urlNovel;
-        this.trustStorePath = trustStorePath;
-        this.trustStorePassword = trustStorePassword;
-        this.certificateAlias = certificateAlias;
-    }
+    @Value("${URL_BASE}")
+    private String urlBase;
+
+    @Value("${URL_NOVEL}")
+    private String urlNovel;
+
 
     public void fetchChapter(int chapterNumber) {
 
-        String url = this.urlBase + urlNovel;
+        String url = this.urlBase + this.urlNovel + chapterNumber;
         System.out.println("Fetching chapter " + chapterNumber + " from " + url);
         try {
+
             URL requestUrl = new URL(url);
-
-            // Load the default TrustStore
-            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            trustStore.load(null); // Load empty TrustStore
-
-            // Load the imported certificate from the custom TrustStore
-            String customTrustStorePath = trustStorePath;
-            char[] customTrustStorePassword = trustStorePassword.toCharArray();
-            String customCertificateAlias = certificateAlias;
-
-            KeyStore customTrustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            customTrustStore.load(new FileInputStream(customTrustStorePath), customTrustStorePassword);
-            trustStore.setCertificateEntry(customCertificateAlias, customTrustStore.getCertificate(customCertificateAlias));
-
-            // Create TrustManagerFactory with the custom TrustStore
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init(trustStore);
-
-            // Create SSLContext and initialize it with the TrustManagerFactory
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
-
-            // Use the custom SSLContext for HttpsURLConnection
-            HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
-
-            /*
-            // sleep for a random amount of time between 1 and 20 seconds for AntiDetectionServices
-
-                Random random = new Random();
-
-                // Generate a random decimal number between 1 and 20.
-                double randomSeconds = 0 + (20 - 1) * random.nextDouble();
-
-                System.out.println("Sleeping for " + randomSeconds + " seconds...");
-
-                try {
-                    // Convert seconds to milliseconds and sleep.
-                    Thread.sleep((long) (randomSeconds * 1000));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("Woke up!");
-
-            */
 
             // Open connection and make the GET request
             HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
+
             Properties properties = PropertyLoaderHeaders.loadProperties();
 
             setRequestHeaders(connection, properties);
@@ -104,10 +49,10 @@ public class ChapterFetcher {
 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 StringBuilder response = new StringBuilder();
-                String line;
+                String linee;
 
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
+                while ((linee = reader.readLine()) != null) {
+                    response.append(linee);
                 }
 
                 reader.close();
@@ -118,43 +63,82 @@ public class ChapterFetcher {
                 // Find the desired <div> element
                 Element divElement = document.selectFirst("div.chapter-body[v-pre]");
 
+                Elements originalElements = document.select("sentence.original");
+
+                Elements translatedElements = document.select("sentence.translated");
+
                 // Extract the content of the <div> element
                 assert divElement != null;
-                String divContent = divElement.text();
+
+                List<String> originalList = new ArrayList<>();
+                List<String> translatedList = new ArrayList<>();
+
+                for (Element originalLine : originalElements) {
+                    originalList.add(originalLine.text());
+                }
+
+                for (Element translatedLine : translatedElements) {
+                    translatedList.add(translatedLine.text());
+                }
 
                 // Save the content to a file
                 String directoryPath = "/novelScrapedData/";
 
-                File directory = new File(directoryPath);
-                directory.mkdirs();
-                Date date = new Date();
-                String fileName = directoryPath + "chapter_" + date.getTime()+"number_" + chapterNumber + ".txt";
+                String originalFolderPath = directoryPath + "original/";
+                String translatedFolderPath = directoryPath + "translated/";
 
-                FileWriter fileWriter = new FileWriter(fileName);
-                fileWriter.write(divContent);
-                fileWriter.close();
+                // Ensure the folders exist, if not create them
+                new File(originalFolderPath).mkdirs();
+                new File(translatedFolderPath).mkdirs();
 
-                // Calculate the number of tokens
-                int numTokens = countTokens(divContent);
-                System.out.println("Number of tokens for chapter " + chapterNumber + ": " + numTokens);
+                FileWriter originalFileWriter = null;
+
+                // Check language and create corresponding original file in the original folder
+                if (!originalList.isEmpty()) {
+                    String firstLine = originalList.get(0);
+                    if (isChinese(firstLine)) {
+                        originalFileWriter = new FileWriter(originalFolderPath + "cn_chapter_" + chapterNumber + ".txt");
+                    } else if (isKorean(firstLine)) {
+                        originalFileWriter = new FileWriter(originalFolderPath + "kr_chapter_" + chapterNumber + ".txt");
+                    } else if (isJapanese(firstLine)) {
+                        originalFileWriter = new FileWriter(originalFolderPath + "jp_chapter_" + chapterNumber + ".txt");
+                    } else { // default to English if no other language is matched
+                        originalFileWriter = new FileWriter(originalFolderPath + "en_chapter_" + chapterNumber + ".txt");
+                    }
+                }
+
+                // Write originalList to the corresponding file
+                if (originalFileWriter != null) {
+                    for (String line : originalList) {
+                        String trimmedLine = line.trim();
+                        if (trimmedLine.isEmpty()) continue; // Skip empty lines
+                        originalFileWriter.write(trimmedLine + "\n");
+                    }
+                    originalFileWriter.close(); // Don't forget to close the file writer.
+                }
+
+                // Create and Write translatedList to a file in the translated folder
+                FileWriter translatedFileWriter = new FileWriter(translatedFolderPath + "translated_chapter_" + chapterNumber + ".txt");
+                for (String line : translatedList) {
+                    String trimmedLine = line.trim();
+                    if (trimmedLine.isEmpty()) continue; // Skip empty lines
+                    translatedFileWriter.write(trimmedLine + "\n");
+                }
+                translatedFileWriter.close();
             } else {
                 System.out.println("Error - Response Code: " + responseCode);
             }
 
             connection.disconnect();
-        } catch (IOException | KeyStoreException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (CertificateException | NoSuchAlgorithmException | KeyManagementException e) {
-            throw new RuntimeException(e);
         }
     }
 
     // Function to count the number of tokens in a string
     private int countTokens(String text) {
         // Replace this with the appropriate tokenization logic for your use case
-        // For example, if you are using whitespace-based tokenization, you can use:
-        // String[] tokens = text.split("\\s+");
-        // return tokens.length;
+        //TODO
         return text.split("\\s+").length;
     }
 
@@ -163,5 +147,34 @@ public class ChapterFetcher {
             String propertyValue = properties.getProperty(propertyName);
             connection.setRequestProperty(propertyName, propertyValue);
         }
+    }
+
+
+    private boolean isChinese(String s) {
+        for (char c : s.toCharArray()) {
+            if (Character.UnicodeBlock.of(c) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS || Character.UnicodeBlock.of(c) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A || Character.UnicodeBlock.of(c) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isKorean(String s) {
+        for (char c : s.toCharArray()) {
+            if (Character.UnicodeBlock.of(c) == Character.UnicodeBlock.HANGUL_SYLLABLES || Character.UnicodeBlock.of(c) == Character.UnicodeBlock.HANGUL_JAMO || Character.UnicodeBlock.of(c) == Character.UnicodeBlock.HANGUL_COMPATIBILITY_JAMO) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Method to check if a string contains Japanese characters
+    private boolean isJapanese(String s) {
+        for (char c : s.toCharArray()) {
+            if (Character.UnicodeBlock.of(c) == Character.UnicodeBlock.HIRAGANA || Character.UnicodeBlock.of(c) == Character.UnicodeBlock.KATAKANA || Character.UnicodeBlock.of(c) == Character.UnicodeBlock.CJK_UNIFIED_IDEOGRAPHS) {
+                return true;
+            }
+        }
+        return false;
     }
 }
