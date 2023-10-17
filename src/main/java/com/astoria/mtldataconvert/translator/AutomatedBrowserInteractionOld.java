@@ -7,14 +7,14 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
-public class AutomatedBrowserInteraction {
+public class AutomatedBrowserInteractionOld {
 
     private static final String CHROME_PATH = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 
     public static void main(String[] args) throws InterruptedException {
-        AutomatedBrowserInteraction automatedBrowserInteraction = new AutomatedBrowserInteraction();
-        automatedBrowserInteraction.initializeWebDriver();
-        //automatedBrowserInteraction.pointerLocation();
+        AutomatedBrowserInteractionOld automatedBrowserInteractionOld = new AutomatedBrowserInteractionOld();
+        automatedBrowserInteractionOld.initializeWebDriver();
+        //automatedBrowserInteractionOld.pointerLocation();
     }
 
     public void initializeWebDriver() {

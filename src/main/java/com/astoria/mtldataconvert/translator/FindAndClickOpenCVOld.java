@@ -1,6 +1,9 @@
 package com.astoria.mtldataconvert.translator;
 
-import org.opencv.core.*;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -9,7 +12,7 @@ import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
-public class FindAndClickOpenCV {
+public class FindAndClickOpenCVOld {
 
     // if maven reloads add the opencv.jar again via project module dependencies
     static {
