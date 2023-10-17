@@ -10,6 +10,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 
 public class FindAndClickOpenCV {
+
+    // if maven reloads add the opencv.jar again via project module dependencies
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         System.out.println("Loaded OpenCV native library.");
@@ -36,7 +38,7 @@ public class FindAndClickOpenCV {
 
         // Load the "" template
         System.out.println("Loading '' template...");
-        Mat template = Imgcodecs.imread("img.png", Imgcodecs.IMREAD_GRAYSCALE);
+        Mat template = Imgcodecs.imread("template.png", Imgcodecs.IMREAD_GRAYSCALE);
         Imgproc.GaussianBlur(template, template, new Size(5, 5), 0);
 
         // Multi-scale template matching
@@ -66,22 +68,6 @@ public class FindAndClickOpenCV {
         } else {
             System.out.println("No good match found.");
         }
-
-//        Mat result = new Mat();
-//        System.out.println("Matching template with screenshot...");
-//        Imgproc.matchTemplate(gray, template, result, Imgproc.TM_CCOEFF_NORMED);
-//
-//        // Find the location with the highest matching value
-//        System.out.println("Finding best match location...");
-//        Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
-//        org.opencv.core.Point matchLoc = mmr.maxLoc;
-//
-//        // Move the mouse to the detected location and click
-//        System.out.println("Moving mouse to detected location and clicking...");
-//        robot.mouseMove((int) (matchLoc.x + template.cols() / 2), (int) (matchLoc.y + template.rows() / 2));
-//        robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-//        robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-//        System.out.println("Operation completed.");
     }
 
     public static Mat bufferedImageToMat(BufferedImage bi) {
