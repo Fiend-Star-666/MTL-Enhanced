@@ -13,4 +13,6 @@ public class MyController {
         model.addAttribute("message", "Hello from the controller!");
         return "myview"; // This should match the name of your HTML file (without .html)
     }
+
+
 }
