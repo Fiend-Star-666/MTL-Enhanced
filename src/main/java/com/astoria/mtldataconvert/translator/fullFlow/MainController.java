@@ -1,121 +1,87 @@
-//package com.astoria.mtldataconvert.translator.fullFlow;
-//
-//import java.awt.*;
-//import java.io.File;
-//import java.io.IOException;
-//import java.nio.file.Files;
-//import java.nio.file.Paths;
-//import java.util.List;
-//
-//public class MainController {
-//
-//   // private GPT4Translator gpt4Translator;
-//    private FindAndClickOpenCV findAndClickOpenCV;
-//
-//    public MainController() throws AWTException {
-//        //this.gpt4Translator = new GPT4Translator();
-//        this.findAndClickOpenCV = new FindAndClickOpenCV();
-//    }
-//
-//    public void executeBatchTranslation(String chineseFolderPath, String englishFolderPath, int batchSize) {
-//        File chineseFolder = new File(chineseFolderPath);
-//        File englishFolder = new File(englishFolderPath);
-//
-//        File[] chineseFiles = chineseFolder.listFiles();
-//        File[] englishFiles = englishFolder.listFiles();
-//
-//        if (chineseFiles == null || englishFiles == null || chineseFiles.length != englishFiles.length) {
-//            System.out.println("Mismatch in the number of files or directories not found!");
-//            return;
-//        }
-//
-//        for (int i = 0; i < chineseFiles.length; i++) {
-//            List<String> chineseLines = readFile(chineseFiles[i].getAbsolutePath());
-//            List<String> englishLines = readFile(englishFiles[i].getAbsolutePath());
-//
-//            for (int j = 0; j < Math.min(chineseLines.size(), englishLines.size()); j += batchSize) {
-//                int end = Math.min(j + batchSize, Math.min(chineseLines.size(), englishLines.size()));
-//                List<String> batchChinese = chineseLines.subList(j, end);
-//                List<String> batchEnglish = englishLines.subList(j, end);
-//
-//                String prompt = createPrompt(batchChinese, batchEnglish);
-//              //  gpt4Translator.sendPrompt(prompt);
-//
-//                try {
-//                    Thread.sleep(90000);  // Wait for 1.5 minutes as specified
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                findAndClickOpenCV.findAndClickTemplate("path_to_template.png");
-//            }
-//        }
-//    }
-//
-//    private List<String> readFile(String filePath) {
-//        try {
-//            return Files.readAllLines(Paths.get(filePath));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//
-//    private String createPrompt(List<String> chineseLines, List<String> englishLines) {
-//        StringBuilder prompt = new StringBuilder();
-//        prompt.append("original:{");
-//        chineseLines.forEach(line -> prompt.append(line).append("\n"));
-//        prompt.append("}, translated:{");
-//        englishLines.forEach(line -> prompt.append(line).append("\n"));
-//        prompt.append("}");
-//        return prompt.toString();
-//    }
-//
-//    public static void main(String[] args) {
-//        try {
-//            MainController mainController = new MainController();
-//            mainController.executeBatchTranslation("path_to_chinese_folder", "path_to_english_folder", 50);
-//        } catch (AWTException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//}
-//
-//
-//package com.astoria.mtldataconvert.translator.gptui;
-//
-//public class MainController {
-//
-//    private final TranslationHelper translationHelper;
-//    private final FindAndClickOpenCV findAndClick;
-//
-//    public MainController() throws Exception {
-//        translationHelper = new TranslationHelper();
-//        findAndClick = new FindAndClickOpenCV();
-//    }
-//
-//    public void startBatchTranslation() throws InterruptedException {
-//        // Simulating the process of getting lines from files.
-//        // This will be replaced with actual file reading in the future.
-//        String originalText = "original:{<50 lines here>}";
-//        String translatedText = "translated:{<50 lines here>}";
-//
-//        String improvedTranslation = translationHelper.getImprovedTranslation(originalText, translatedText);
-//
-//        // Wait for 1.5 minutes as specified
-//        Thread.sleep(90000);
-//
-//        findAndClick.findAndClickTemplate("path_to_copy_code_template.png");
-//    }
-//
-//    public static void main(String[] args) {
-//        try {
-//            MainController controller = new MainController();
-//            controller.startBatchTranslation();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-//}
-//
-//
+package com.astoria.mtldataconvert.translator.fullFlow;
+
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainController {
+
+    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplate.png";
+    private static final String COPY_CODE_TEMPLATE = "CopyCodeTemplate.png";
+    private static final int INITIAL_BROWSER_DELAY = 5000; // 5 seconds
+    private static final int FINAL_BROWSER_DELAY = 45000; // 45 seconds
+    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\original";
+    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\translated";
+
+    private FindAndClickOpenCV findAndClickOpenCV;
+    private AutomatedBrowserInteraction automatedBrowserInteraction;
+    private FileHandler fileHandler;
+
+    public MainController() throws AWTException {
+        System.out.println("Initializing MainController...");
+        this.findAndClickOpenCV = new FindAndClickOpenCV();
+        this.automatedBrowserInteraction = new AutomatedBrowserInteraction();
+        this.fileHandler = new FileHandler();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Main method started...");
+
+        try {
+            MainController mainController = new MainController();
+            System.out.println("Initializing Web Browser...");
+            mainController.automatedBrowserInteraction.initializeWebBrowser();
+            System.out.println("Applying initial browser delay...");
+            mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY);
+            System.out.println("Finding and clicking text box template...");
+            mainController.findAndClickOpenCV.findAndClickTemplate(TEXT_BOX_TEMPLATE);
+
+
+            List<String> prompts = new ArrayList<>();
+            System.out.println("Executing batch translation...");
+            prompts = mainController.fileHandler.executeBatchTranslation(CHINESE_FOLDER_PATH, ENGLISH_FOLDER_PATH, 50);
+
+            for (int i = 0; i < prompts.size(); i++) {
+                System.out.println("prompt: " + prompts.get(i) + " i: " + i);
+                String prompt = prompts.get(i);
+                mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY+INITIAL_BROWSER_DELAY);
+                mainController.automatedBrowserInteraction.pasteText(prompt);
+                mainController.automatedBrowserInteraction.browerDelay(FINAL_BROWSER_DELAY);
+                mainController.automatedBrowserInteraction.browerDelay(FINAL_BROWSER_DELAY);
+                mainController.automatedBrowserInteraction.browerDelay(FINAL_BROWSER_DELAY);
+                boolean copiedCorrectly = false;
+                String clipboardData = prompt;
+
+                long startTime = System.currentTimeMillis(); // Fetch starting time
+                long timeout = 100000; // 10 seconds in milliseconds
+
+                while (!copiedCorrectly) {
+                    long elapsedTime = System.currentTimeMillis() - startTime;
+
+                    if (elapsedTime >= timeout) {
+                        System.out.println("Timed out waiting for correct copy.");
+                        break; // Break the loop if timed out
+                    }
+
+                    mainController.findAndClickOpenCV.findAndClickTemplate(COPY_CODE_TEMPLATE);
+                    clipboardData = mainController.automatedBrowserInteraction.getClipboardData();
+
+                    if (!clipboardData.equals(prompt)) {
+                        copiedCorrectly = true;
+                    }
+                }
+                System.out.println("Clipboard data: " + clipboardData);
+
+                //Save clipboard data to file
+                mainController.fileHandler.saveClipboardDataToFile(prompt);
+            }
+
+
+        } catch (Exception e) {
+            System.out.println("An exception occurred: " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println("Main method ended.");
+    }
+}

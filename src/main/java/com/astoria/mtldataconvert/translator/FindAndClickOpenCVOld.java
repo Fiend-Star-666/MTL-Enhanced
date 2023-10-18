@@ -41,7 +41,7 @@ public class FindAndClickOpenCVOld {
 
         // Load the "" template
         System.out.println("Loading '' template...");
-        Mat template = Imgcodecs.imread("template.png", Imgcodecs.IMREAD_GRAYSCALE);
+        Mat template = Imgcodecs.imread("TextBoxTemplate.png", Imgcodecs.IMREAD_GRAYSCALE);
         Imgproc.GaussianBlur(template, template, new Size(5, 5), 0);
 
         // Multi-scale template matching
