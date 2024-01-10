@@ -21,7 +21,7 @@ public class AutomatedBrowserInteraction {
     public void initializeWebBrowser() {
         System.out.println("Initializing web browser...");
         String url = "https://chat.openai.com";
-        int freePort = 9222;
+        int freePort = 9227;
 
         launchChromeWithRemoteDebugging(freePort, url);
 
@@ -44,7 +44,7 @@ public class AutomatedBrowserInteraction {
     }
 
     public void browerDelay(int delay) {
-        System.out.println("Browser delay initiated.");
+        System.out.println("Browser delay initiated. for"+delay+"ms");
         // Assuming you want to wait for Chrome to open and load content before performing actions
         robot.delay((int) delay);
     }

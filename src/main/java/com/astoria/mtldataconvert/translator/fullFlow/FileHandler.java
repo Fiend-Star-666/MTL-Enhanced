@@ -6,9 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class FileHandler {
 
@@ -29,8 +27,19 @@ public class FileHandler {
             return prompts;
         }
 
-        System.out.println("Match found in the number of files.");
+        Arrays.sort(chineseFiles, (f1, f2) -> {
+            int n1 = extractNumber(f1.getName());
+            int n2 = extractNumber(f2.getName());
+            return Integer.compare(n1, n2);
+        });
 
+        Arrays.sort(englishFiles, (f1, f2) -> {
+            int n1 = extractNumber(f1.getName());
+            int n2 = extractNumber(f2.getName());
+            return Integer.compare(n1, n2);
+        });
+        System.out.println("Match found in the number of files.");
+        System.out.println("Number of files: " + chineseFiles.length);
         for (int i = 0; i < chineseFiles.length; i++) {
             List<String> chineseLines = readFile(chineseFiles[i].getAbsolutePath());
             List<String> englishLines = readFile(englishFiles[i].getAbsolutePath());
@@ -62,6 +71,17 @@ public class FileHandler {
         }
     }
 
+    private static int extractNumber(String fileName) {
+        int num = 0;
+        try {
+            String numberOnly= fileName.replaceAll("[^0-9]", "");
+            num = Integer.parseInt(numberOnly);
+        } catch (NumberFormatException e) {
+            System.out.println("Error extracting number from file name: " + fileName);
+        }
+        return num;
+    }
+
     public String createPrompt(List<String> chineseLines, List<String> englishLines) {
         System.out.println("Creating prompt...");
 
@@ -69,11 +89,13 @@ public class FileHandler {
         prompt.append("original:{");
         chineseLines.forEach(line -> {
             String sanitizedLine = line.replaceAll("[^\\p{L}\\p{N}\\p{P}\\p{Z}]", "");  // Keep only Unicode characters
+            sanitizedLine = replaceLanguageSpecificBrackets(sanitizedLine);
             prompt.append(sanitizedLine).append("\n");
         });
         prompt.append("}, translated:{");
         englishLines.forEach(line -> {
             String sanitizedLine = line.replaceAll("[^\\p{L}\\p{N}\\p{P}\\p{Z}]", "");  // Keep only Unicode characters
+            sanitizedLine = replaceLanguageSpecificBrackets(sanitizedLine);
             prompt.append(sanitizedLine).append("\n");
         });
         prompt.append("}");
@@ -82,20 +104,31 @@ public class FileHandler {
         return prompt.toString();
     }
 
+    private String replaceLanguageSpecificBrackets(String line) {
+        // Replace Chinese brackets
+        line = line.replace("【", "(");
+        line = line.replace("】", ")");
 
-    private int chapterCount = 0;
+        // Replace Korean brackets
+        line = line.replace("《", "(");
+        line = line.replace("》", ")");
 
-    public String prompt() {
-        // Implement batch file reading and prompt creation here
-        return "Prompt goes here";
+        // Replace Japanese brackets
+        line = line.replace("「", "(");
+        line = line.replace("」", ")");
+        line = line.replace("『", "(");
+        line = line.replace("』", ")");
+
+        return line;
     }
 
-    public void saveClipboardDataToFile(String clipboardData) {
+
+
+    public void saveClipboardDataToFile(String clipboardData, int chapterCount) {
         System.out.println("Saving clipboard data to file...");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("Chapter_" + chapterCount + ".txt"))) {
             writer.write(clipboardData);
-            chapterCount++;
         } catch (IOException e) {
             e.printStackTrace();
         }

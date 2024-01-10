@@ -31,7 +31,7 @@ public class MainController {
         try {
             MainController mainController = new MainController();
             System.out.println("Initializing Web Browser...");
-            mainController.automatedBrowserInteraction.initializeWebBrowser();
+            //mainController.automatedBrowserInteraction.initializeWebBrowser();
             System.out.println("Applying initial browser delay...");
             mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY);
             System.out.println("Finding and clicking text box template...");
@@ -42,7 +42,17 @@ public class MainController {
             System.out.println("Executing batch translation...");
             prompts = mainController.fileHandler.executeBatchTranslation(CHINESE_FOLDER_PATH, ENGLISH_FOLDER_PATH, 50);
 
-            for (int i = 0; i < prompts.size(); i++) {
+
+           // i=3 done start from 4 and try to incorporate the scroller and a absolute pixel clicker for the text box. and change the custom instructions so it does not give any of the
+            //other things in the code blocks.
+            for (int i = 83; i < prompts.size(); i++) {
+
+                System.out.println("Finding and clicking text box template again");
+                mainController.findAndClickOpenCV.findAndClickTemplate(TEXT_BOX_TEMPLATE);
+                mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY);
+
+                mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY);
+
                 System.out.println("prompt: " + prompts.get(i) + " i: " + i);
                 String prompt = prompts.get(i);
                 mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY+INITIAL_BROWSER_DELAY);
@@ -50,6 +60,8 @@ public class MainController {
                 mainController.automatedBrowserInteraction.browerDelay(FINAL_BROWSER_DELAY);
                 mainController.automatedBrowserInteraction.browerDelay(FINAL_BROWSER_DELAY);
                 mainController.automatedBrowserInteraction.browerDelay(FINAL_BROWSER_DELAY);
+                mainController.automatedBrowserInteraction.browerDelay(FINAL_BROWSER_DELAY);
+
                 boolean copiedCorrectly = false;
                 String clipboardData = prompt;
 
@@ -74,9 +86,9 @@ public class MainController {
                 System.out.println("Clipboard data: " + clipboardData);
 
                 //Save clipboard data to file
-                mainController.fileHandler.saveClipboardDataToFile(prompt);
+                if(!clipboardData.equals(prompt))
+                    mainController.fileHandler.saveClipboardDataToFile(clipboardData, i);
             }
-
 
         } catch (Exception e) {
             System.out.println("An exception occurred: " + e.getMessage());
