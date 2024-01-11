@@ -35,8 +35,8 @@ public class MainController {
             System.out.println("Applying initial browser delay...");
             mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY);
             System.out.println("Finding and clicking text box template...");
-            mainController.findAndClickOpenCV.findAndClickTemplate(TEXT_BOX_TEMPLATE);
-
+//            mainController.findAndClickOpenCV.findAndClickTemplate(TEXT_BOX_TEMPLATE);
+            mainController.findAndClickOpenCV.findAndClickTemplate(TEXT_BOX_TEMPLATE, mainController.automatedBrowserInteraction);
 
             List<String> prompts = new ArrayList<>();
             System.out.println("Executing batch translation...");
@@ -45,17 +45,19 @@ public class MainController {
 
            // i=3 done start from 4 and try to incorporate the scroller and a absolute pixel clicker for the text box. and change the custom instructions so it does not give any of the
             //other things in the code blocks.
-            for (int i = 108; i < prompts.size(); i++) {
+            for (int i = 136; i < prompts.size(); i++) {
 
                 System.out.println("Finding and clicking text box template again");
-                mainController.findAndClickOpenCV.findAndClickTemplate(TEXT_BOX_TEMPLATE);
-                mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY);
 
-                mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY);
+                mainController.findAndClickOpenCV.findAndClickTemplate(TEXT_BOX_TEMPLATE, mainController.automatedBrowserInteraction);
+
+//                mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY);
+
+//                mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY);
 
                 System.out.println("prompt: " + prompts.get(i) + " i: " + i);
                 String prompt = prompts.get(i);
-                mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY+INITIAL_BROWSER_DELAY);
+                mainController.automatedBrowserInteraction.browerDelay(INITIAL_BROWSER_DELAY);
                 mainController.automatedBrowserInteraction.pasteText(prompt);
                 mainController.automatedBrowserInteraction.browerDelay(FINAL_BROWSER_DELAY);
                 mainController.automatedBrowserInteraction.browerDelay(FINAL_BROWSER_DELAY);
@@ -66,7 +68,7 @@ public class MainController {
                 String clipboardData = prompt;
 
                 long startTime = System.currentTimeMillis(); // Fetch starting time
-                long timeout = 100000; // 10 seconds in milliseconds
+                long timeout = 1000000; // 10 seconds in milliseconds
 
                 while (!copiedCorrectly) {
                     long elapsedTime = System.currentTimeMillis() - startTime;
@@ -76,7 +78,9 @@ public class MainController {
                         break; // Break the loop if timed out
                     }
 
-                    mainController.findAndClickOpenCV.findAndClickTemplate(COPY_CODE_TEMPLATE);
+                    //mainController.findAndClickOpenCV.findAndClickTemplate(COPY_CODE_TEMPLATE);
+                    mainController.findAndClickOpenCV.findAndClickTemplate(COPY_CODE_TEMPLATE, mainController.automatedBrowserInteraction);
+
                     clipboardData = mainController.automatedBrowserInteraction.getClipboardData();
 
                     if (!clipboardData.equals(prompt)) {

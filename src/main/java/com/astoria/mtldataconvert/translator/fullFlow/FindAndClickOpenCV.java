@@ -23,11 +23,13 @@ public class FindAndClickOpenCV {
         System.out.println("Robot object created.");
     }
 
-    public void findAndClickTemplate(String templatePath) {
+    public void findAndClickTemplate(String templatePath, AutomatedBrowserInteraction automatedBrowserInteraction) {
+
         System.out.println("Starting findAndClickTemplate method.");
 
         // Load the image of the full screen
         Mat screenMat = getFullScreenShot();
+
 
         Mat gray = new Mat();
         Imgproc.cvtColor(screenMat, gray, Imgproc.COLOR_BGR2GRAY);
@@ -73,7 +75,13 @@ public class FindAndClickOpenCV {
             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
             System.out.println("Operation completed.");
         } else {
-            System.out.println("No good match found.");
+            System.out.println("No good match found. Scrolling...");
+            if (templatePath.toLowerCase().contains("copycode")) {
+                automatedBrowserInteraction.scrollUp();
+            } else {
+                automatedBrowserInteraction.scrollDown();
+            }
+            findAndClickTemplate(templatePath, automatedBrowserInteraction);
         }
     }
 
@@ -98,4 +106,5 @@ public class FindAndClickOpenCV {
         mat.put(0, 0, data);
         return mat;
     }
+
 }

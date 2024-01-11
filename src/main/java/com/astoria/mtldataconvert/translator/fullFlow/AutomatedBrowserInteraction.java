@@ -65,6 +65,18 @@ public class AutomatedBrowserInteraction {
         robot.keyPress(KeyEvent.VK_ENTER);
         browerDelay(2410);
         robot.keyRelease(KeyEvent.VK_ENTER);
+
+        // Get the current mouse position
+        Point currentMousePosition = MouseInfo.getPointerInfo().getLocation();
+
+        // Move the mouse up by about 100 pixels
+        robot.mouseMove(currentMousePosition.x, currentMousePosition.y - 100);
+
+        // Scroll down multiple times after pasting and clicking enter
+        for (int i = 0; i < 500; i++) { // Change this number to scroll more or less
+            scrollDown();
+            browerDelay(5);
+        }
     }
 
     public String getClipboardData() throws IOException, UnsupportedFlavorException {
@@ -72,4 +84,13 @@ public class AutomatedBrowserInteraction {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         return clipboard.getData(DataFlavor.stringFlavor).toString();
     }
+
+    public void scrollUp() {
+        robot.mouseWheel(-1); // Scroll up
+    }
+
+    public void scrollDown() {
+        robot.mouseWheel(1); // Scroll down
+    }
+
 }
