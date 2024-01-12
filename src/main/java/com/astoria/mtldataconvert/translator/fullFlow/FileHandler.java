@@ -10,8 +10,6 @@ import java.util.*;
 
 public class FileHandler {
 
-    private FindAndClickOpenCV findAndClickOpenCV;
-
     public List<String> executeBatchTranslation(String chineseFolderPath, String englishFolderPath, int batchSize) {
 
         System.out.println("Executing batch translation...");

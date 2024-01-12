@@ -11,7 +11,7 @@ import java.io.IOException;
 public class AutomatedBrowserInteraction {
 
     private static final String CHROME_PATH = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-    private Robot robot;
+    private final Robot robot;
 
     public AutomatedBrowserInteraction() throws AWTException {
         this.robot = new Robot();
@@ -27,7 +27,7 @@ public class AutomatedBrowserInteraction {
 
         System.out.println("Chrome launched and navigated to URL, now performing UI interaction...");
 
-        browerDelay(5000);
+        waitDelay(5000);
     }
 
     private void launchChromeWithRemoteDebugging(int port, String url) {
@@ -43,10 +43,10 @@ public class AutomatedBrowserInteraction {
         }
     }
 
-    public void browerDelay(int delay) {
-        System.out.println("Browser delay initiated. for"+delay+"ms");
+    public void waitDelay(int delay) {
+        System.out.println("Browser delay initiated. for "+delay+"ms");
         // Assuming you want to wait for Chrome to open and load content before performing actions
-        robot.delay((int) delay);
+        robot.delay(delay);
     }
 
     public void pasteText(String text) {
@@ -54,16 +54,16 @@ public class AutomatedBrowserInteraction {
         StringSelection stringSelection = new StringSelection(text);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
-        browerDelay(5000);
+        waitDelay(5000);
         // Simulate a Ctrl+V paste action
         robot.keyPress(KeyEvent.VK_CONTROL);
         robot.keyPress(KeyEvent.VK_V);
-        browerDelay(1211);
+        waitDelay(1211);
         robot.keyRelease(KeyEvent.VK_V);
         robot.keyRelease(KeyEvent.VK_CONTROL);
-        browerDelay(745);
+        waitDelay(745);
         robot.keyPress(KeyEvent.VK_ENTER);
-        browerDelay(2410);
+        waitDelay(2410);
         robot.keyRelease(KeyEvent.VK_ENTER);
 
         // Get the current mouse position
@@ -75,7 +75,7 @@ public class AutomatedBrowserInteraction {
         // Scroll down multiple times after pasting and clicking enter
         for (int i = 0; i < 500; i++) { // Change this number to scroll more or less
             scrollDown();
-            browerDelay(5);
+            waitDelay(5);
         }
     }
 

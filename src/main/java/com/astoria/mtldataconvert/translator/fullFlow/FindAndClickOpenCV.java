@@ -16,7 +16,7 @@ public class FindAndClickOpenCV {
         System.out.println("Loaded OpenCV native library.");
     }
 
-    private Robot robot;
+    private final Robot robot;
 
     public FindAndClickOpenCV() throws AWTException {
         this.robot = new Robot();
@@ -78,11 +78,67 @@ public class FindAndClickOpenCV {
             System.out.println("No good match found. Scrolling...");
             if (templatePath.toLowerCase().contains("copycode")) {
                 automatedBrowserInteraction.scrollUp();
-            } else {
+            } else if (templatePath.toLowerCase().contains("textbox")){
                 automatedBrowserInteraction.scrollDown();
             }
             findAndClickTemplate(templatePath, automatedBrowserInteraction);
         }
+    }
+
+    public boolean findTemplate(String templatePath) {
+
+        System.out.println("Starting findTemplate method.");
+
+        // Load the image of the full screen
+        Mat screenMat = getFullScreenShot();
+
+
+        Mat gray = new Mat();
+        Imgproc.cvtColor(screenMat, gray, Imgproc.COLOR_BGR2GRAY);
+        gray.convertTo(gray, CvType.CV_8U);
+
+        Imgproc.GaussianBlur(gray, gray, new Size(5, 5), 0);
+
+        // Load the template
+        Mat template = Imgcodecs.imread(templatePath);
+        System.out.println("Template loaded.");
+
+        Mat templateGray = new Mat();
+        Imgproc.cvtColor(template, templateGray, Imgproc.COLOR_BGR2GRAY);
+        templateGray.convertTo(templateGray, CvType.CV_8U);
+        Imgproc.GaussianBlur(templateGray, templateGray, new Size(5, 5), 0);
+
+        double bestMatchValue = 0;
+        Point bestMatchLoc = null;
+        double factor = 1.0;
+        double scaleStep = 0.05;
+
+        for (double scale = 0.8; scale <= 1.2; scale += scaleStep) {
+            Mat resizedTemplate = new Mat();
+            Imgproc.resize(templateGray, resizedTemplate, new Size(), scale, scale, Imgproc.INTER_AREA);
+            resizedTemplate.convertTo(resizedTemplate, CvType.CV_8U);
+
+            Mat result = new Mat();
+            result.convertTo(result, CvType.CV_8U);
+
+            Imgproc.matchTemplate(gray, resizedTemplate, result, Imgproc.TM_CCOEFF_NORMED);
+
+            Core.MinMaxLocResult mmr = Core.minMaxLoc(result);
+            if (mmr.maxVal > bestMatchValue) {
+                bestMatchValue = mmr.maxVal;
+                bestMatchLoc = mmr.maxLoc;
+                factor = scale;
+            }
+        }
+
+        if (bestMatchValue > 0.9) {
+            robot.mouseMove((int) (bestMatchLoc.x + template.cols() * factor / 2), (int) (bestMatchLoc.y + template.rows() * factor / 2));
+            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+            System.out.println("Operation completed.");
+            return true;
+        }
+        else return false;
     }
 
     private Mat getFullScreenShot() {
