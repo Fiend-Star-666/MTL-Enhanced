@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MainController {
 
-    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplate.png";
+    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplateNew.png";
     private static final String COPY_CODE_TEMPLATE = "CopyCodeTemplate.png";
     private static final String CORRECT_GPT_IDENTIFIER_TEMPLATE = "CorrectGptIdentifier.png";
     private static final String CREATE_NEW_CHAT_TEMPLATE = "CreateNewChatTemplate.png";
@@ -21,9 +21,11 @@ public class MainController {
 //     private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\original";
 //    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\translated";
 
-    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\original";
-    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\translated";
+//    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\original";
+//    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\translated";
 
+    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\Looking-Forward-In-Another-World\\original";
+    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\Looking-Forward-In-Another-World\\translated";
 
     private final FindAndClickOpenCV findAndClickOpenCV;
     private final AutomatedBrowserInteraction automatedBrowserInteraction;
@@ -91,7 +93,7 @@ public class MainController {
 
             List<String> prompts;
             System.out.println("Executing batch translation...");
-            prompts = mainController.fileHandler.executeBatchTranslation(CHINESE_FOLDER_PATH, ENGLISH_FOLDER_PATH, 25);
+            prompts = mainController.fileHandler.executeBatchTranslation(CHINESE_FOLDER_PATH, ENGLISH_FOLDER_PATH, 50); //50 shelter, 25 machine war
 
 
             // i=3 done start from 4 and try to incorporate the scroller and an absolute pixel clicker for the text box. and change the custom instructions, so it does not give any of the
@@ -100,8 +102,9 @@ public class MainController {
             System.out.println("Total prompts: " + totalPrompts);
             int newTranslationStartIndex = 1;
             //188 for infinite shelter
-            //29 for unlimited machine war
-            for (int i = 54; i < prompts.size(); i++) {
+            //54 for unlimited machine war
+            //18-19 for looking forward in another world
+            for (int i = 13; i < prompts.size(); i++) {
 
 //                if (!mainController.findAndClickOpenCV.findTemplate(CORRECT_GPT_IDENTIFIER_TEMPLATE)) {
 //                    System.out.println("Correct GPT Identifier not found. Skipping iteration...");

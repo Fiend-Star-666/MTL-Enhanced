@@ -30,7 +30,7 @@ public class ChapterFetcher {
 
     public void fetchChapter(int chapterNumber) {
 
-        String url = this.urlBase + this.urlNovel + "book-14-chapter-" + chapterNumber;
+        String url = this.urlBase + this.urlNovel + chapterNumber;
         System.out.println("Fetching chapter " + chapterNumber + " from " + url);
         try {
 

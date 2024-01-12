@@ -123,7 +123,9 @@ public class FileHandler {
 
 
     public void saveClipboardDataToFile(String clipboardData, int chapterCount) {
-        String folderPath = "C:\\Users\\gurms\\IdeaProjects\\MTL-Enhanced\\Unlimited-Machine-wars\\"; // replace with your folder path
+       // String folderPath = "C:\\Users\\gurms\\IdeaProjects\\MTL-Enhanced\\Unlimited-Machine-wars\\"; // replace with your folder path
+        String folderPath = "C:\\Users\\gurms\\IdeaProjects\\MTL-Enhanced\\Looking-Forward-To-Another_world\\"; // replace with your folder path
+
         System.out.println("Saving clipboard data to file...");
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(folderPath + "Chapter_" + chapterCount + ".txt"))) {
