@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MainController {
 
-    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplateOld.png";
+    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplate.png";
     private static final String COPY_CODE_TEMPLATE = "CopyCodeTemplate.png";
     private static final String CORRECT_GPT_IDENTIFIER_TEMPLATE = "CorrectGptIdentifier.png";
     private static final String CREATE_NEW_CHAT_TEMPLATE = "CreateNewChatTemplate.png";
@@ -18,11 +18,11 @@ public class MainController {
 
     private static final int INITIAL_BROWSER_DELAY = 5000; // 5 seconds
     private static final int FINAL_BROWSER_DELAY = 45000; // 45 seconds
-     private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\original";
-    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\translated";
+//     private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\original";
+//    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\translated";
 
-//    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\original";
-//    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\translated";
+    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\original";
+    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\translated";
 
 
     private final FindAndClickOpenCV findAndClickOpenCV;
@@ -100,8 +100,8 @@ public class MainController {
             System.out.println("Total prompts: " + totalPrompts);
             int newTranslationStartIndex = 1;
             //188 for infinite shelter
-            //15 for unlimited machine war
-            for (int i = 15; i < prompts.size(); i++) {
+            //29 for unlimited machine war
+            for (int i = 53; i < prompts.size(); i++) {
 
 //                if (!mainController.findAndClickOpenCV.findTemplate(CORRECT_GPT_IDENTIFIER_TEMPLATE)) {
 //                    System.out.println("Correct GPT Identifier not found. Skipping iteration...");
