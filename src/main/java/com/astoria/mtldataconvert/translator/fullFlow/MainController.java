@@ -6,17 +6,24 @@ import java.util.List;
 
 public class MainController {
 
-    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplate.png";
+    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplateOld.png";
     private static final String COPY_CODE_TEMPLATE = "CopyCodeTemplate.png";
     private static final String CORRECT_GPT_IDENTIFIER_TEMPLATE = "CorrectGptIdentifier.png";
     private static final String CREATE_NEW_CHAT_TEMPLATE = "CreateNewChatTemplate.png";
+    private static final String CONTINUE_GENERATING_TEMPLATE = "ContinueGeneratingTemplate.png";
+    private static final String ERROR_GENERATING_RESPONSE_TEMPLATE = "ErrorGeneratingResponseTemplate.png";
+    private static final String NETWORK_ERROR_TEMPLATE = "NetworkErrorTemplate.png";
     private static final String REFRESH_PAGE_TEMPLATE = "RefreshPageTemplate.png";
     private static final String WAIT_BOX_TEMPLATE = "WaitBoxTemplate.png";
 
     private static final int INITIAL_BROWSER_DELAY = 5000; // 5 seconds
     private static final int FINAL_BROWSER_DELAY = 45000; // 45 seconds
-    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\original";
+     private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\original";
     private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\translated";
+
+//    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\original";
+//    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\translated";
+
 
     private final FindAndClickOpenCV findAndClickOpenCV;
     private final AutomatedBrowserInteraction automatedBrowserInteraction;
@@ -84,7 +91,7 @@ public class MainController {
 
             List<String> prompts;
             System.out.println("Executing batch translation...");
-            prompts = mainController.fileHandler.executeBatchTranslation(CHINESE_FOLDER_PATH, ENGLISH_FOLDER_PATH, 50);
+            prompts = mainController.fileHandler.executeBatchTranslation(CHINESE_FOLDER_PATH, ENGLISH_FOLDER_PATH, 25);
 
 
             // i=3 done start from 4 and try to incorporate the scroller and an absolute pixel clicker for the text box. and change the custom instructions, so it does not give any of the
@@ -92,7 +99,9 @@ public class MainController {
             int totalPrompts = prompts.size();
             System.out.println("Total prompts: " + totalPrompts);
             int newTranslationStartIndex = 1;
-            for (int i = 186; i < prompts.size(); i++) {
+            //188 for infinite shelter
+            //15 for unlimited machine war
+            for (int i = 15; i < prompts.size(); i++) {
 
 //                if (!mainController.findAndClickOpenCV.findTemplate(CORRECT_GPT_IDENTIFIER_TEMPLATE)) {
 //                    System.out.println("Correct GPT Identifier not found. Skipping iteration...");
@@ -107,7 +116,7 @@ public class MainController {
                 String prompt = prompts.get(i);
 
 
-                if (newTranslationStartIndex % 5 == 0) { // After every 5 iterations
+                if (newTranslationStartIndex % 12 == 0) { // After every 5 iterations
                     System.out.println("Finding and clicking create new chat template...");
                     mainController.findAndClickOpenCV.findAndClickTemplate(CREATE_NEW_CHAT_TEMPLATE, mainController.automatedBrowserInteraction);
                     mainController.automatedBrowserInteraction.waitDelay(15 * 1000); // Wait for 15 seconds
@@ -123,6 +132,20 @@ public class MainController {
                 mainController.automatedBrowserInteraction.waitDelay(FINAL_BROWSER_DELAY);
                 mainController.automatedBrowserInteraction.waitDelay(FINAL_BROWSER_DELAY);
                 mainController.automatedBrowserInteraction.waitDelay(FINAL_BROWSER_DELAY);
+
+                for (int t = 0; t < 10; t++) {
+                    if (mainController.findAndClickOpenCV.findTemplate(CONTINUE_GENERATING_TEMPLATE)) {
+                        mainController.automatedBrowserInteraction.waitDelay(FINAL_BROWSER_DELAY);
+                    }
+                    if (mainController.findAndClickOpenCV.findTemplate(ERROR_GENERATING_RESPONSE_TEMPLATE)|| mainController.findAndClickOpenCV.findTemplate(NETWORK_ERROR_TEMPLATE)) {
+
+                        for (int p = 0; p < 50; p++) {
+                            Toolkit.getDefaultToolkit().beep(); // This line will make the beep sound
+                            mainController.automatedBrowserInteraction.waitDelay(1000);
+                        }
+                    }
+                    mainController.automatedBrowserInteraction.waitDelay(1000);
+                }
                 mainController.automatedBrowserInteraction.waitDelay(FINAL_BROWSER_DELAY);
 
                 boolean copiedCorrectly = false;
@@ -153,7 +176,7 @@ public class MainController {
                 //Save clipboard data to file
                 if (!clipboardData.equals(prompt)) mainController.fileHandler.saveClipboardDataToFile(clipboardData, i);
 
-                newTranslationStartIndex+=1;
+                newTranslationStartIndex += 1;
             }
 
         } catch (Exception e) {

@@ -78,8 +78,10 @@ public class FindAndClickOpenCV {
             System.out.println("No good match found. Scrolling...");
             if (templatePath.toLowerCase().contains("copycode")) {
                 automatedBrowserInteraction.scrollUp();
+                automatedBrowserInteraction.waitDelay(300);
             } else if (templatePath.toLowerCase().contains("textbox")){
                 automatedBrowserInteraction.scrollDown();
+                automatedBrowserInteraction.waitDelay(300);
             }
             findAndClickTemplate(templatePath, automatedBrowserInteraction);
         }
@@ -131,7 +133,7 @@ public class FindAndClickOpenCV {
             }
         }
 
-        if (bestMatchValue > 0.9) {
+        if (bestMatchValue > 0.85) {
             robot.mouseMove((int) (bestMatchLoc.x + template.cols() * factor / 2), (int) (bestMatchLoc.y + template.rows() * factor / 2));
             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);

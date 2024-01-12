@@ -44,7 +44,9 @@ public class AutomatedBrowserInteraction {
     }
 
     public void waitDelay(int delay) {
-        System.out.println("Browser delay initiated. for "+delay+"ms");
+
+        if(delay>10000) System.out.println("Browser delay initiated. for "+delay+"ms");
+
         // Assuming you want to wait for Chrome to open and load content before performing actions
         robot.delay(delay);
     }
