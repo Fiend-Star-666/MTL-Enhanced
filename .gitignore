@@ -41,3 +41,6 @@ build/
 /.idea/codeStyles/Project.xml
 /.idea/vcs.xml
 /.idea/
+
+### translations ###
+*.txt

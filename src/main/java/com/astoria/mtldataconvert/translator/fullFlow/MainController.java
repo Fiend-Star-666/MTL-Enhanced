@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MainController {
 
-    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplateNew.png";
+    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplateOld.png";
     private static final String COPY_CODE_TEMPLATE = "CopyCodeTemplate.png";
     private static final String CORRECT_GPT_IDENTIFIER_TEMPLATE = "CorrectGptIdentifier.png";
     private static final String CREATE_NEW_CHAT_TEMPLATE = "CreateNewChatTemplate.png";
@@ -18,14 +18,15 @@ public class MainController {
 
     private static final int INITIAL_BROWSER_DELAY = 5000; // 5 seconds
     private static final int FINAL_BROWSER_DELAY = 45000; // 45 seconds
-//     private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\original";
-//    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\translated";
+
+    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\original";
+    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\translated";
 
 //    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\original";
 //    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\translated";
 
-    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\Looking-Forward-In-Another-World\\original";
-    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\Looking-Forward-In-Another-World\\translated";
+//    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\Looking-Forward-In-Another-World\\original";
+//    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\Looking-Forward-In-Another-World\\translated";
 
     private final FindAndClickOpenCV findAndClickOpenCV;
     private final AutomatedBrowserInteraction automatedBrowserInteraction;
@@ -93,7 +94,7 @@ public class MainController {
 
             List<String> prompts;
             System.out.println("Executing batch translation...");
-            prompts = mainController.fileHandler.executeBatchTranslation(CHINESE_FOLDER_PATH, ENGLISH_FOLDER_PATH, 50); //50 shelter, 25 machine war
+            prompts = mainController.fileHandler.executeBatchTranslation(CHINESE_FOLDER_PATH, ENGLISH_FOLDER_PATH, 50); //50 shelter, 25 machine war, 50 looking forward
 
 
             // i=3 done start from 4 and try to incorporate the scroller and an absolute pixel clicker for the text box. and change the custom instructions, so it does not give any of the
@@ -103,8 +104,8 @@ public class MainController {
             int newTranslationStartIndex = 1;
             //188 for infinite shelter
             //54 for unlimited machine war
-            //18-19 for looking forward in another world
-            for (int i = 13; i < prompts.size(); i++) {
+            //41 for looking forward in another world
+            for (int i = 187; i < prompts.size(); i++) {
 
 //                if (!mainController.findAndClickOpenCV.findTemplate(CORRECT_GPT_IDENTIFIER_TEMPLATE)) {
 //                    System.out.println("Correct GPT Identifier not found. Skipping iteration...");
@@ -119,7 +120,7 @@ public class MainController {
                 String prompt = prompts.get(i);
 
 
-                if (newTranslationStartIndex % 12 == 0) { // After every 5 iterations
+                if (newTranslationStartIndex % 12 == 0) { // After every 12 iterations
                     System.out.println("Finding and clicking create new chat template...");
                     mainController.findAndClickOpenCV.findAndClickTemplate(CREATE_NEW_CHAT_TEMPLATE, mainController.automatedBrowserInteraction);
                     mainController.automatedBrowserInteraction.waitDelay(15 * 1000); // Wait for 15 seconds
