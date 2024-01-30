@@ -102,10 +102,10 @@ public class MainController {
             int totalPrompts = prompts.size();
             System.out.println("Total prompts: " + totalPrompts);
             int newTranslationStartIndex = 1;
-            //188 for infinite shelter
+            //341 for infinite shelter
             //54 for unlimited machine war
             //41 for looking forward in another world
-            for (int i = 187; i < prompts.size(); i++) {
+            for (int i = 649; i < prompts.size(); i++) {
 
 //                if (!mainController.findAndClickOpenCV.findTemplate(CORRECT_GPT_IDENTIFIER_TEMPLATE)) {
 //                    System.out.println("Correct GPT Identifier not found. Skipping iteration...");
