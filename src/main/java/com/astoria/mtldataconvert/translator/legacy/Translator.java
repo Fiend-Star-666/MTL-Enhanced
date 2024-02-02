@@ -1,4 +1,4 @@
-package com.astoria.mtldataconvert.translator;
+package com.astoria.mtldataconvert.translator.legacy;
 
 import lombok.Getter;
 import lombok.Setter;

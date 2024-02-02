@@ -1,4 +1,4 @@
-package com.astoria.mtldataconvert.translator.ui_interactions;
+package com.astoria.mtldataconvert.translator.legacy.ui_interactions;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;

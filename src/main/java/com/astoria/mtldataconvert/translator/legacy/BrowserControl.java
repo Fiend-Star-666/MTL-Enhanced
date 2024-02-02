@@ -1,4 +1,4 @@
-package com.astoria.mtldataconvert.translator;
+package com.astoria.mtldataconvert.translator.legacy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

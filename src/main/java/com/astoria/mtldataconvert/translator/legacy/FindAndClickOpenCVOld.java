@@ -1,4 +1,4 @@
-package com.astoria.mtldataconvert.translator;
+package com.astoria.mtldataconvert.translator.legacy;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;

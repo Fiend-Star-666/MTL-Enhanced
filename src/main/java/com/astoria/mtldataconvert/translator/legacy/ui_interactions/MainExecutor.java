@@ -1,7 +1,7 @@
-package com.astoria.mtldataconvert.translator.ui_interactions;
+package com.astoria.mtldataconvert.translator.legacy.ui_interactions;
 
-import com.astoria.mtldataconvert.translator.AutomatedBrowserInteractionOld;
-import com.astoria.mtldataconvert.translator.FindAndClickOpenCVOld;
+import com.astoria.mtldataconvert.translator.legacy.AutomatedBrowserInteractionOld;
+import com.astoria.mtldataconvert.translator.legacy.FindAndClickOpenCVOld;
 
 public class MainExecutor {
 

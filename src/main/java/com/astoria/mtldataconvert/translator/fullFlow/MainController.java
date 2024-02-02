@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MainController {
 
-    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplateOld.png";
+    private static final String TEXT_BOX_TEMPLATE = "TextBoxTemplateNEW.png";
     private static final String COPY_CODE_TEMPLATE = "CopyCodeTemplate.png";
     private static final String CORRECT_GPT_IDENTIFIER_TEMPLATE = "CorrectGptIdentifier.png";
     private static final String CREATE_NEW_CHAT_TEMPLATE = "CreateNewChatTemplate.png";
@@ -19,14 +19,14 @@ public class MainController {
     private static final int INITIAL_BROWSER_DELAY = 5000; // 5 seconds
     private static final int FINAL_BROWSER_DELAY = 45000; // 45 seconds
 
-    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\original";
-    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\translated";
+//    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\original";
+//    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\my-post-apocalyptic-shelter-levels-up-infinitely-chapter\\translated";
 
 //    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\original";
 //    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\unlimited-machine-war\\translated";
 
-//    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\Looking-Forward-In-Another-World\\original";
-//    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\Looking-Forward-In-Another-World\\translated";
+    private static final String CHINESE_FOLDER_PATH = "E:\\Novel\\Looking-Forward-In-Another-World\\original";
+    private static final String ENGLISH_FOLDER_PATH = "E:\\Novel\\Looking-Forward-In-Another-World\\translated";
 
     private final FindAndClickOpenCV findAndClickOpenCV;
     private final AutomatedBrowserInteraction automatedBrowserInteraction;
@@ -102,7 +102,7 @@ public class MainController {
             int totalPrompts = prompts.size();
             System.out.println("Total prompts: " + totalPrompts);
             int newTranslationStartIndex = 1;
-            //341 for infinite shelter
+            //649 for infinite shelter
             //54 for unlimited machine war
             //41 for looking forward in another world
             for (int i = 649; i < prompts.size(); i++) {

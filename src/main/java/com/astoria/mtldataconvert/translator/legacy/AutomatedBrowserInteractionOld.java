@@ -1,4 +1,4 @@
-package com.astoria.mtldataconvert.translator;
+package com.astoria.mtldataconvert.translator.legacy;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;

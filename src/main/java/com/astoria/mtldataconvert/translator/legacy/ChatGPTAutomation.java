@@ -1,4 +1,4 @@
-package com.astoria.mtldataconvert.translator;
+package com.astoria.mtldataconvert.translator.legacy;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
