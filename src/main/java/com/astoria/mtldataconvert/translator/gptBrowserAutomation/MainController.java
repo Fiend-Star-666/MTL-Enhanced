@@ -1,4 +1,4 @@
-package com.astoria.mtldataconvert.translator.fullFlow;
+package com.astoria.mtldataconvert.translator.gptBrowserAutomation;
 
 
 import java.awt.*;
@@ -141,7 +141,7 @@ public class MainController {
                     if (mainController.findAndClickOpenCV.findTemplate(CONTINUE_GENERATING_TEMPLATE)) {
                         mainController.automatedBrowserInteraction.waitDelay(FINAL_BROWSER_DELAY);
                     }
-                    if (mainController.findAndClickOpenCV.findTemplate(ERROR_GENERATING_RESPONSE_TEMPLATE)|| mainController.findAndClickOpenCV.findTemplate(NETWORK_ERROR_TEMPLATE)) {
+                    if (mainController.findAndClickOpenCV.findTemplate(ERROR_GENERATING_RESPONSE_TEMPLATE) || mainController.findAndClickOpenCV.findTemplate(NETWORK_ERROR_TEMPLATE)) {
 
                         for (int p = 0; p < 50; p++) {
                             Toolkit.getDefaultToolkit().beep(); // This line will make the beep sound

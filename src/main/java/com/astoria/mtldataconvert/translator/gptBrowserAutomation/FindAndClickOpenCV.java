@@ -1,4 +1,4 @@
-package com.astoria.mtldataconvert.translator.fullFlow;
+package com.astoria.mtldataconvert.translator.gptBrowserAutomation;
 
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
